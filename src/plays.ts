@@ -1,6 +1,11 @@
+export enum PlayType {
+  Tragedy = "tragedy",
+  Comedy = "comedy",
+}
+
 interface Play {
   name: string;
-  type: string;
+  type: PlayType;
 }
 
 export interface Plays {

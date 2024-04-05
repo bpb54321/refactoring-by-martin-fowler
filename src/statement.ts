@@ -1,5 +1,5 @@
 import type { Invoice } from "./invoices";
-import type { Plays } from "./plays";
+import { type Plays, PlayType } from "./plays";
 
 export function statement(invoice: Invoice, plays: Plays) {
   let totalAmount = 0;
@@ -15,13 +15,13 @@ export function statement(invoice: Invoice, plays: Plays) {
     const play = plays[perf.playID];
     let thisAmount = 0;
     switch (play.type) {
-      case "tragedy":
+      case PlayType.Tragedy:
         thisAmount = 40000;
         if (perf.audience > 30) {
           thisAmount += 1000 * (perf.audience - 30);
         }
         break;
-      case "comedy":
+      case PlayType.Comedy:
         thisAmount = 30000;
         if (perf.audience > 20) {
           thisAmount += 10000 + 500 * (perf.audience - 20);
