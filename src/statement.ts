@@ -33,8 +33,12 @@ export function statement(invoice: Invoice, plays: Plays) {
     return result;
   }
 
+  function getPlay(performance: Performance) {
+    return plays[performance.playID];
+  }
+
   for (let perf of invoice.performances) {
-    const play = plays[perf.playID];
+    const play = getPlay(perf);
     const thisAmount = getChargeForPerformance(play, perf);
     // add volume credits
     volumeCredits += Math.max(perf.audience - 30, 0);
