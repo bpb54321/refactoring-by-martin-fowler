@@ -1,5 +1,5 @@
-import type { Invoice } from "./invoices";
-import { type Plays, PlayType } from "./plays";
+import type { Invoice, Performance } from "./invoices";
+import { type Play, type Plays, PlayType } from "./plays";
 
 export function statement(invoice: Invoice, plays: Plays) {
   let totalAmount = 0;
@@ -11,8 +11,7 @@ export function statement(invoice: Invoice, plays: Plays) {
     minimumFractionDigits: 2,
   }).format;
 
-  for (let perf of invoice.performances) {
-    const play = plays[perf.playID];
+  function getChargeForPerformance(play: Play, perf: Performance) {
     let thisAmount = 0;
     switch (play.type) {
       case PlayType.Tragedy:
@@ -31,6 +30,12 @@ export function statement(invoice: Invoice, plays: Plays) {
       default:
         throw new Error(`unknown type: ${play.type}`);
     }
+    return thisAmount;
+  }
+
+  for (let perf of invoice.performances) {
+    const play = plays[perf.playID];
+    const thisAmount = getChargeForPerformance(play, perf);
     // add volume credits
     volumeCredits += Math.max(perf.audience - 30, 0);
     // add extra credit for every ten comedy attendees

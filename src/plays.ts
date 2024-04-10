@@ -3,7 +3,7 @@ export enum PlayType {
   Comedy = "comedy",
 }
 
-interface Play {
+export interface Play {
   name: string;
   type: PlayType;
 }
