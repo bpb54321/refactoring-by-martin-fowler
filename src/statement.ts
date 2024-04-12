@@ -11,9 +11,9 @@ export function statement(invoice: Invoice, plays: Plays) {
     minimumFractionDigits: 2,
   }).format;
 
-  function getChargeForPerformance(play: Play, aPerformance: Performance) {
+  function getChargeForPerformance(aPerformance: Performance) {
     let result = 0;
-    switch (play.type) {
+    switch (getPlay(aPerformance).type) {
       case PlayType.Tragedy:
         result = 40000;
         if (aPerformance.audience > 30) {
@@ -28,7 +28,7 @@ export function statement(invoice: Invoice, plays: Plays) {
         result += 300 * aPerformance.audience;
         break;
       default:
-        throw new Error(`unknown type: ${play.type}`);
+        throw new Error(`unknown type: ${getPlay(aPerformance).type}`);
     }
     return result;
   }
@@ -38,14 +38,14 @@ export function statement(invoice: Invoice, plays: Plays) {
   }
 
   for (let perf of invoice.performances) {
-    const play = getPlay(perf);
-    const thisAmount = getChargeForPerformance(play, perf);
+    const thisAmount = getChargeForPerformance(perf);
     // add volume credits
     volumeCredits += Math.max(perf.audience - 30, 0);
     // add extra credit for every ten comedy attendees
-    if ("comedy" === play.type) volumeCredits += Math.floor(perf.audience / 5);
+    if ("comedy" === getPlay(perf).type)
+      volumeCredits += Math.floor(perf.audience / 5);
     // print line for this order
-    result += ` ${play.name}: ${format(thisAmount / 100)} (${perf.audience} seats)\n`;
+    result += ` ${getPlay(perf).name}: ${format(thisAmount / 100)} (${perf.audience} seats)\n`;
     totalAmount += thisAmount;
   }
   result += `Amount owed is ${format(totalAmount / 100)}\n`;
