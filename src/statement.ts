@@ -37,12 +37,17 @@ export function statement(invoice: Invoice, plays: Plays) {
     return plays[performance.playID];
   }
 
-  for (let perf of invoice.performances) {
-    // add volume credits
+  function volumeCreditsFor(perf: Performance): number {
+    let volumeCredits = 0;
     volumeCredits += Math.max(perf.audience - 30, 0);
-    // add extra credit for every ten comedy attendees
-    if ("comedy" === getPlay(perf).type)
+    if ("comedy" === getPlay(perf).type) {
       volumeCredits += Math.floor(perf.audience / 5);
+    }
+    return volumeCredits;
+  }
+
+  for (let perf of invoice.performances) {
+    volumeCredits += volumeCreditsFor(perf);
     // print line for this order
     result += ` ${getPlay(perf).name}: ${format(getChargeForPerformance(perf) / 100)} (${perf.audience} seats)\n`;
     totalAmount += getChargeForPerformance(perf);
