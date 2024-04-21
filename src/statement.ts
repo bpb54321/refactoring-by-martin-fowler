@@ -42,7 +42,7 @@ export function statement(invoice: Invoice, plays: Plays) {
       style: "currency",
       currency: "USD",
       minimumFractionDigits: 2,
-    }).format(aNumber);
+    }).format(aNumber / 100);
   }
 
   let totalAmount = 0;
@@ -52,10 +52,10 @@ export function statement(invoice: Invoice, plays: Plays) {
   for (let perf of invoice.performances) {
     volumeCredits += volumeCreditsFor(perf);
     // print line for this order
-    result += ` ${getPlay(perf).name}: ${usd(getChargeForPerformance(perf) / 100)} (${perf.audience} seats)\n`;
+    result += ` ${getPlay(perf).name}: ${usd(getChargeForPerformance(perf))} (${perf.audience} seats)\n`;
     totalAmount += getChargeForPerformance(perf);
   }
-  result += `Amount owed is ${usd(totalAmount / 100)}\n`;
+  result += `Amount owed is ${usd(totalAmount)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
   return result;
 }
