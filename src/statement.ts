@@ -59,6 +59,9 @@ export function statement(invoice: Invoice, plays: Plays) {
   for (let perf of invoice.performances) {
     // print line for this order
     result += ` ${getPlay(perf).name}: ${usd(getChargeForPerformance(perf))} (${perf.audience} seats)\n`;
+  }
+
+  for (let perf of invoice.performances) {
     totalAmount += getChargeForPerformance(perf);
   }
 
