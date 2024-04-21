@@ -50,10 +50,12 @@ export function statement(invoice: Invoice, plays: Plays) {
   let result = `Statement for ${invoice.customer}\n`;
 
   for (let perf of invoice.performances) {
-    volumeCredits += volumeCreditsFor(perf);
     // print line for this order
     result += ` ${getPlay(perf).name}: ${usd(getChargeForPerformance(perf))} (${perf.audience} seats)\n`;
     totalAmount += getChargeForPerformance(perf);
+  }
+  for (let perf of invoice.performances) {
+    volumeCredits += volumeCreditsFor(perf);
   }
   result += `Amount owed is ${usd(totalAmount)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
