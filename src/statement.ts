@@ -37,7 +37,7 @@ export function statement(invoice: Invoice, plays: Plays) {
     return result;
   }
 
-  function format(aNumber: number) {
+  function usd(aNumber: number) {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
@@ -52,10 +52,10 @@ export function statement(invoice: Invoice, plays: Plays) {
   for (let perf of invoice.performances) {
     volumeCredits += volumeCreditsFor(perf);
     // print line for this order
-    result += ` ${getPlay(perf).name}: ${format(getChargeForPerformance(perf) / 100)} (${perf.audience} seats)\n`;
+    result += ` ${getPlay(perf).name}: ${usd(getChargeForPerformance(perf) / 100)} (${perf.audience} seats)\n`;
     totalAmount += getChargeForPerformance(perf);
   }
-  result += `Amount owed is ${format(totalAmount / 100)}\n`;
+  result += `Amount owed is ${usd(totalAmount / 100)}\n`;
   result += `You earned ${volumeCredits} credits\n`;
   return result;
 }
