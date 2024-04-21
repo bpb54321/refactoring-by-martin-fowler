@@ -46,7 +46,6 @@ export function statement(invoice: Invoice, plays: Plays) {
   }
 
   let totalAmount = 0;
-  let volumeCredits = 0;
   let result = `Statement for ${invoice.customer}\n`;
 
   for (let perf of invoice.performances) {
@@ -54,6 +53,7 @@ export function statement(invoice: Invoice, plays: Plays) {
     result += ` ${getPlay(perf).name}: ${usd(getChargeForPerformance(perf))} (${perf.audience} seats)\n`;
     totalAmount += getChargeForPerformance(perf);
   }
+  let volumeCredits = 0;
   for (let perf of invoice.performances) {
     volumeCredits += volumeCreditsFor(perf);
   }
