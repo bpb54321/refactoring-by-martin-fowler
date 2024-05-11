@@ -2,14 +2,18 @@ import type { Invoice, Performance } from "./invoices";
 import { type Plays, PlayType } from "./plays";
 
 interface StatementData {
-  [key: string]: string;
+  customer: string;
+  performances: Performance[];
 }
 export function statement(invoice: Invoice, plays: Plays) {
-  const statementData = {};
-  return renderPlainText(statementData, invoice, plays);
+  const statementData: StatementData = {
+    customer: invoice.customer,
+    performances: invoice.performances,
+  };
+  return renderPlainText(statementData, plays);
 }
 
-function renderPlainText(data: StatementData, invoice: Invoice, plays: Plays) {
+function renderPlainText(data: StatementData, plays: Plays) {
   function getChargeForPerformance(aPerformance: Performance) {
     let result = 0;
     switch (getPlay(aPerformance).type) {
@@ -55,7 +59,7 @@ function renderPlainText(data: StatementData, invoice: Invoice, plays: Plays) {
 
   function totalVolumeCredits() {
     let volumeCredits = 0;
-    for (let perf of invoice.performances) {
+    for (let perf of data.performances) {
       volumeCredits += volumeCreditsFor(perf);
     }
     return volumeCredits;
@@ -63,15 +67,15 @@ function renderPlainText(data: StatementData, invoice: Invoice, plays: Plays) {
 
   function totalAmount() {
     let result = 0;
-    for (let perf of invoice.performances) {
+    for (let perf of data.performances) {
       result += getChargeForPerformance(perf);
     }
     return result;
   }
 
-  let result = `Statement for ${invoice.customer}\n`;
+  let result = `Statement for ${data.customer}\n`;
 
-  for (let perf of invoice.performances) {
+  for (let perf of data.performances) {
     // print line for this order
     result += ` ${getPlay(perf).name}: ${usd(getChargeForPerformance(perf))} (${perf.audience} seats)\n`;
   }
