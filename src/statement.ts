@@ -1,11 +1,15 @@
 import type { Invoice, Performance } from "./invoices";
 import { type Plays, PlayType } from "./plays";
 
+interface StatementData {
+  [key: string]: string;
+}
 export function statement(invoice: Invoice, plays: Plays) {
-  return renderPlainText(invoice, plays);
+  const statementData = {};
+  return renderPlainText(statementData, invoice, plays);
 }
 
-function renderPlainText(invoice: Invoice, plays: Plays) {
+function renderPlainText(data: StatementData, invoice: Invoice, plays: Plays) {
   function getChargeForPerformance(aPerformance: Performance) {
     let result = 0;
     switch (getPlay(aPerformance).type) {
