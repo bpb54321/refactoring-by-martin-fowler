@@ -2,6 +2,10 @@ import type { Invoice, Performance } from "./invoices";
 import { type Plays, PlayType } from "./plays";
 
 export function statement(invoice: Invoice, plays: Plays) {
+  return renderPlainText(invoice, plays);
+}
+
+function renderPlainText(invoice: Invoice, plays: Plays) {
   function getChargeForPerformance(aPerformance: Performance) {
     let result = 0;
     switch (getPlay(aPerformance).type) {
